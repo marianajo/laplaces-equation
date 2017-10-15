@@ -1,0 +1,59 @@
+%----------------------------------------------------------------------------
+%	preambulo
+%----------------------------------------------------------------------------
+
+% idiomas e fontes
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage[table,xcdraw]{xcolor}
+\usepackage{amsmath}
+\usepackage[brazilian]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[sc]{mathpazo} % fonte Palatino
+\usepackage[T1]{fontenc}
+\linespread{1.05} % espaçamento para a Palatino
+\usepackage{microtype}
+\usepackage[hang, small,labelfont=bf,up,textfont=it,up]{caption} % Custom captions under/above floats in tables or figures
+\usepackage{lettrine} % fonte grande no começo do parágrafo
+\usepackage{bm}
+
+\usepackage{graphicx}
+
+% layout da página
+\usepackage[hmarginratio=1:1,top=25mm,bottom=35mm,right=15mm,left=15mm,columnsep=20pt]{geometry} % margens do documento
+\usepackage{multicol} % pacote para múltiplas colunas
+\usepackage{multirow}
+\usepackage{booktabs} % Horizontal rules in tables
+\usepackage{float} % Required for tables and figures in the multi-column environment - they need to be placed in specific locations with the [H] (e.g. \begin{table}[H])
+\usepackage{paralist} % Used for the compactitem environment which makes bullet points with less space between them
+\usepackage{wrapfig}
+
+% outros pacotes
+\usepackage{hyperref} % fazer links no pdf
+
+% customização do abstract
+\usepackage{abstract}
+\renewcommand{\abstractnamefont}{\normalfont\bfseries} % Set the "Abstract" text to bold
+\renewcommand{\abstracttextfont}{\normalfont\small\itshape} % Set the abstract itself to small italic text
+
+% customização de títulos
+\usepackage{titlesec}
+\renewcommand\thesection{\Roman{section}} % Roman numerals for the sections
+\renewcommand\thesubsection{\Roman{subsection}} % Roman numerals for subsections
+\titleformat{\section}[block]{\large\scshape\centering}{\thesection.}{1em}{} % Change the look of the section titles
+\titleformat{\subsection}[block]{\large}{\thesubsection.}{1em}{} % Change the look of the section titles
+
+% customização de cabeçalhos e rodapés
+\usepackage{fancyhdr} % Headers and footers
+\pagestyle{fancy} % All pages have headers and footers
+\fancyhead{} % Blank out the default header
+\fancyfoot{} % Blank out the default footer
+\fancyhead[C]{Eletromagnetismo I $\bullet$ Trabalho Final $\bullet$ Novembro, 2017} % texto do cabeçalho
+\fancyfoot[RO,LE]{\thepage} % texto do rodapé
+
+% ambiente de figura para multicolunas
+\newenvironment{Figure}
+  {\par\medskip\noindent\minipage{\linewidth}}
+  {\endminipage\par\medskip}
+
+% fim do preâmbulo
