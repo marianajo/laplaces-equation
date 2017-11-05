@@ -16,11 +16,24 @@
 \usepackage[hang, small,labelfont=bf,up,textfont=it,up]{caption} % Custom captions under/above floats in tables or figures
 \usepackage{lettrine} % fonte grande no começo do parágrafo
 \usepackage{bm}
+\usepackage{listings}
+\lstset{numbers=left,
+stepnumber=1,
+firstnumber=1,
+numberstyle=\tiny,
+extendedchars=true, %				Não mecha!
+breaklines=true,
+frame=tb,
+basicstyle=\footnotesize,
+stringstyle=\ttfamily,
+showstringspaces=false
+}
+\renewcommand{\lstlistingname}{Code}
 
 \usepackage{graphicx}
 
 % layout da página
-\usepackage[hmarginratio=1:1,top=25mm,bottom=35mm,right=15mm,left=15mm,columnsep=20pt]{geometry} % margens do documento
+\usepackage[hmarginratio=1:1,top=25mm,bottom=35mm,right=20mm,left=20mm,columnsep=20pt]{geometry} % margens do documento
 \usepackage{multicol} % pacote para múltiplas colunas
 \usepackage{multirow}
 \usepackage{booktabs} % Horizontal rules in tables
