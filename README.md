@@ -5,6 +5,8 @@ O objetivo do trabalho é desenvolver soluções numéricas para a Equação de 
 
 O projeto até o momento é separado em duas *branches*: "paper" para o desenvolvimento do relatório e "code" para o desenvolvimento do Jupyter Notebook com a solução. Esta separação foi feita para que no final do trabalho possa-se reorganizar os commits e tornar o projeto linear, onde a história faça sentido.
 
+O link direto para o pdf com a implementação dos métodos está [aqui](https://github.com/marianajo/laplaces-equation/blob/code/code/LaplacesEquation.pdf).
+
 ## Dependências
 A utilização da distribuição [Anaconda](https://www.continuum.io/downloads) é recomendada.
 
