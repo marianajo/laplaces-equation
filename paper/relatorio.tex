@@ -16,33 +16,35 @@
 \maketitle
 \thispagestyle{fancy}
 
-\section*{Abstract}
+\begin{abstract}
+  Propõe-se encontrar a solução da Equação de Laplace a partir de métodos de relaxamento num problema em duas dimensões, com condições de contorno de Dirichlet. São implementados o Método de Jacobi e o Método de Gauss-Seidel, comparando a convergência da solução para ambos. Em ambos os casos a solução converge, sendo que o segundo mostra-se mais eficiente, como esperado na literatura.
+\end{abstract}
 
 \section{Introdução}
 
-A Equação de Laplace é dada por
+Uma equação da forma
 \begin{equation}
 \nabla^2 \varphi = 0
 \label{eq:laplace}
 \end{equation}
+é denominada Equação de Laplace e suas soluções são funções harmônicas. Na ausência de cargas, a Equação de Laplace nos dá o potencial numa determinada região.
 
-As soluções para a Equação de Laplace são funções harmônicas. As funções harmônicas
-possuem a propriedade do valor médio. Isto é, o valor de $\varphi (x, y, z)$ é a média
+As funções harmônicas possuem a propriedade do valor médio. Isto é, o valor de $\varphi (x, y, z)$ é a média
 do valor ao redor deste ponto. Ou seja, ao desenhar uma bola de raio $R$ entorno do
-ponto $(x, y, z)$, a média do valor de $\varphi$ na bola é igual ao valor no centro\cite{grif}:
+ponto $(x, y, z)$, a média do valor de $\varphi$ na bola é igual ao valor no centro \cite{griffithsd.j1999}:
 \begin{equation*}
   \varphi(x, y, z) = \frac{1}{2\pi R}\oint_{\text{esfera}}\varphi \ dS.
 \end{equation*}
 
 Esta propriedade das funções harmônicas nos permite resolver a Equação de Laplace
-através de métodos de relaxamento. A partir das condições de contorno e "chutes razoáveis" para $\varphi$ nas regiões internas, o valor do potencial para
+através de métodos de relaxamento: a partir das condições de contorno e "chutes" \ iniciais para $\varphi$ nas regiões internas, o valor do potencial para
 cada ponto é calculado a partir dos valores de seus vizinhos. Este procedimento é
 repetido iterativamente, fazendo com que a solução convirja.
 
-Este trabalho propõe algumas soluções para a Equação de Laplace utilizando métodos de relaxamento.
+Este trabalho propõe duas soluções para a Equação de Laplace utilizando métodos de relaxamento. O \textit{Jupyter Notebook} com as implementações encontra-se disponível no \href{https://github.com/marianajo/laplaces-equation}{repositório do GitHub} \cite{github}.
 
 
-\section{Problema}
+\subsection*{Problema proposto}
 
 
 Queremos resolver o potencial dentro de uma caixa em $(x, y, z)$, de lados $(a, b, \infty)$. Ou seja, o problema possui simetria em $z$ e, portanto, basta-nos resolver um problema em duas dimensões, $(x, y)$.
@@ -53,20 +55,26 @@ Queremos resolver o potencial dentro de uma caixa em $(x, y, z)$, de lados $(a, 
   \caption{Geometria do problema.}
 \end{figure}
 
-Este problema tem as condições de contorno:
+O problema possui condições de contorno de Dirichlet e são dadas por:
 \begin{enumerate}
-  \item $\varphi(x,0)=-500V$
-  \item $\varphi(x,b)=1000V$
-  \item $\varphi(0,y)=0V$
-  \item $\varphi(a, y) = 50V$
+  \item[i.] $\varphi(x,0)=-500V$
+  \item[ii.] $\varphi(x,b)=1000V$
+  \item[iii.] $\varphi(0,y)=800V$
+  \item[iv.] $\varphi(a, y) = 50V$
 \end{enumerate}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.7]{img/boundaries}
+  \caption{Plano $xy$ com as condições de contorno.}
+\end{figure}
 
 \section{Discretização e método de relaxamento}
 
 Primeiramente, é necessário discretizar o problema e para isso utilizamos
-uma malha\footnote{Traduzido livremente de \textit{mesh grid}.} de pontos que cubra nosso domínio de interesse. Assume-se que
+uma malha\footnote{Trad. \textit{meshgrid}.} de pontos que cubra nosso domínio de interesse. Assume-se que
 os pontos da malha tenham o mesmo espaçamento $h$ entre si, em todas as
-direções.
+direções \cite{giordanon.j1997}.
 
 Cada ponto da malha é descrito pelo par $(i, j)$, assumindo o ponto de
 origem $(x, y) = (0, 0)$, onde as coordenadas $(x, y)$ da malha $(i, j)$
@@ -79,27 +87,27 @@ Consideremos primeiramente apenas a variável $x$:
   \frac{d^2\varphi}{dx^2} = 0
 \end{equation*}
 
-Fazendo a expansão de Taylor em $\varphi$ ao redor de $x$ temos:
+Fazendo a expansão de Taylor de $\varphi$ ao redor de $x$ temos:
 \begin{equation}
   \varphi(x + h) = \varphi(x)+h\frac{d\varphi}{dx}+\frac{1}{2}h^2\frac{d^2\varphi}{dx^2}+...,
   \label{eq:taylor}
 \end{equation}
-com todas as derivadas avaliadas no ponto $x$. A (\ref{eq:taylor}) implica
+com todas as derivadas avaliadas no ponto $x$. A equação (\ref{eq:taylor}) implica
 \begin{equation*}
   \varphi(x + h) + \varphi(x - h) = 2\varphi(x)+h^2\frac{d^2\varphi}{dx^2}+\mathcal{O}(h^4).
 \end{equation*}
 
 Desconsiderando os termos de maior ordem para um $h$ suficientemente pequeno, podemos reescrever como
 
-\begin{equation}
+\begin{equation*}
   \frac{d^2\varphi}{dx^2} \approx \frac{\varphi(x+h)+\varphi(x-h)-2\varphi(x)}{h^2}.
-\end{equation}
+\end{equation*}
 
 O desenvolvimento para $y$ é completamente análogo. Assim, combinando as duas soluções, chegamos a uma aproximação para o Laplaciano:
-\begin{equation}
+\begin{equation*}
   \nabla^2 \varphi = \frac{\varphi(x+h,y)+\varphi(x-h,y)-2\varphi(x,y)}{h^2} +
   \frac{\varphi(x,y+h)\varphi(x,y-h)-2\varphi(x,y)}{h^2}
-\end{equation}
+\end{equation*}
 
 Portanto, utilizando a notação sobre a malha, onde $\varphi(x\pm h, y)=\varphi_{i\pm 1,j}$ e $\varphi(x,y\pm h)=\varphi_{i,j\pm 1}$, a Equação de Laplace fica
 \begin{equation*}
@@ -113,51 +121,75 @@ podendo ser reescrita como
 
 Esta equação é a manifestação da propriedade do valor médio das funções harmônicas. Isto é, o valor em um ponto é a média dos seus valores vizinhos.
 
-De posse desta aproximação, podemos partir de um valor inicial para o potencial, as condições de contorno nas bordas e aplicar (\ref{eq:num_sol}) iterativamente até que se queira, a fim de determinar $\varphi$. Isto é, chagamos assim num método de relaxamento, onde
+Agora, para resolver o problema a partir de (\ref{eq:num_sol}) lançaremos mão de dois métodos iterativos: o Método de Jacobi e o Método de Gauss-Seidel. Para aplicarmos os métodos precisamos "chutar" \ os valores iniciais na região interna do problema. Assim, consideramos que $\varphi_{i, j}=0$ em toda a região interna a temos o potencial inicial como representado na Figura \ref{fig:initial}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.7]{img/initial_potential}
+  \caption{Mapa de cores para o potencial inicial.}
+  \label{fig:initial}
+\end{figure}
+
+\subsection*{Método de Jacobi}
+
+De posse da aproximação (\ref{eq:num_sol}), podemos partir de um valor inicial para o potencial, as condições de contorno nas bordas e aplicar o método iterativamente até que se queira, a fim de determinar $\varphi$. Isto é, chegamos assim num método de relaxamento, onde
 
 \begin{equation}
   \varphi_{i,j}^n = \frac{\varphi_{i+1,j}^{n}+\varphi_{i-1,j}^{n}+\varphi_{i,j+1}^{n}+\varphi_{i,j-1}^{n}}{4}.
   \label{eq:num_sol_it}
 \end{equation}
 
-Agora, para resolver o problema a partir de (\ref{eq:num_sol_it}) lançaremos mão de dois métodos iterativos: o Método de Jacobi e o Método de Gauss-Seidel.
+Aplicando o método obtemos a solução representada no mapa de cores da Figura \ref{fig:jacobi}.
 
-\subsection*{Método de Jacobi}
-
-DESCRIÇÃO DO MÉTODO
-
-Ao aplicar o este método obtemos a solução
-
-FIGURA DA SOLUÇÃO
-
-O cálculo do erro $\epsilon$ é tal que
-\begin{equation}
-  \epsilon = \frac{||\mathbf{x}^n-\mathbf{x}^{n-1}||}{||\mathbf{x}^n||} \leq \tau,
-  \label{eq:error}
-\end{equation}
-onde $\tau$ é a tolerância para o erro do método, que é utilizada como critério de parada. O método deve continuar iterando até que a condição em (\ref{eq:error}) seja satisfeita. Para esta solução consideramos $\tau = 10^{-3}$. CITAR REFERENCIA
-
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.7]{img/jacobi_potential}
+  \caption{Mapa de cores para o potencial calculado a partir do Método de Jacobi.}
+  \label{fig:jacobi}
+\end{figure}
 
 \subsection*{Método de Gauss-Seidel}
 
 O Método de Gauss-Seidel possui a mesma dinâmica do Método de Jacobi, porém ao invés de utilizar todos os valores da
-iteração anterior, os valores disponíveis para $\varphi_{i\pm1, j}$ e $\varphi_{i,j\pm 1}$ são os da própria iteração. Isto torna o processo de relaxamento mais eficiente.
+iteração anterior, os valores disponíveis para $\varphi_{i-1, j}$ e $\varphi_{i,j- 1}$ são os da própria iteração. Isto é, considerando o nosso problema, as posições à esquerda (do leitor) e acima da do elemento que estamos calculando já passaram pela aproximação na atual iteração $n$, e então podemos utilizar estes valores. Fazendo então a troca $\varphi_{i-1,j}^{n-1} \rightarrow \varphi_{i-1,j}^{n}$ e $\varphi_{i-1,j}^{n-1} \rightarrow \varphi_{i-1,j}^{n}$ ficamos com:
 
-FIGURA DA SOLUÇÃO
+\begin{equation}
+  \varphi_{i,j}^n = \frac{\varphi_{i+1,j}^{n-1}+\varphi_{i-1,j}^{n}+\varphi_{i,j+1}^{n-1}+\varphi_{i,j-1}^{n}}{4}
+\end{equation}
 
-Para este método o erro e critério de parada são calculados tal como no Método de Jacobi por (\ref{eq:error}), com a mesma tolerância $\tau$.
-\subsection*{Análise de erros}
+Isto torna o processo de relaxamento mais eficiente. Ao aplicar o Método  de Gauss-Seidel obtém-se o potencial representado no mapa de cores da Figura \ref{fig:gauss}.
 
-\section{Solução analítica}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.7]{img/gauss_potential}
+  \caption{Mapa de cores para o potencial calculado a partir do Método de Gauss-Seidel.}
+  \label{fig:gauss}
+\end{figure}
+
+\subsection*{Erros e convergência}
+A cada iteração $n$ o valor do potencial converge para a solução. O erro entre uma iteração e outra é calculado a partir de
+\begin{equation}
+  \epsilon = \frac{||\mathbf{x}^n-\mathbf{x}^{n-1}||}{||\mathbf{x}^n||} \leq \tau,
+  \label{eq:error}
+\end{equation}
+onde $\tau$ é a tolerância para o erro do método, que é utilizada como critério de parada, e $\mathbf{x}$ é a solução. O método deve continuar iterando até que a condição em (\ref{eq:error}) seja satisfeita. Para esta solução consideramos $\tau = 10^{-3}$. Este mesmo cálculo foi utilizado em ambos os métodos iterativos, e a Figura \ref{fig:erros} mostra os valores dos erros para cada iteração, em cada método \cite{fdouglasbr.l2003}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.75]{img/errors}
+  \caption{Convergência dos erros de ambos os métodos a cada iteração.}
+  \label{fig:erros}
+\end{figure}
+
+Pode-se observar que o Método de Gauss-Seidel converge mais rapidamente para a solução, precisando de apenas 14 iterações para convergir, enquanto que o Método de Jacobi necessita de 22.
+
 
 \section{Conclusão}
 
-\begin{thebibliography}{99}
+A partir das condições de contorno e um chute inicial do potencial $\varphi$ foi possível obter o resultado para os métodos de Jacobi e de Gauss-Seidel, sendo este último mais eficiente, uma vez que chegou à solução mais rapidamente.
 
-\bibitem[Griffiths, 1999]{grif}
-Introduction to electrodynamics, 3rd ed.
-\newblock Peason Education.
-
-\end{thebibliography}
+\nocite{*}
+\bibliographystyle{bib/myieeetr}
+\bibliography{bib/bibliography}
 
 \end{document}
