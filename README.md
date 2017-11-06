@@ -20,3 +20,10 @@ A utilização da distribuição [Anaconda](https://www.continuum.io/downloads) 
 
 ## Como rodar o projeto
 Navegue até a pasta do projeto e rode `jupyter notebook` para iniciar o servidor Jupyter. Isto iniciará uma sessão em seu browser. Navegue até a pasta `/code` e abra o arquivo `solution.ipynb`.
+
+## A tentar:
+
+- Cálculo do campo elétrico a partir da solução encontrada
+- Plot das equipotenciais
+- Plot 3D do potencial encontrado
+- Mudando a geometria, colocando um potencial no centro do tubo (Giordano)
